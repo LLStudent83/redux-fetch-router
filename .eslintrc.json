@@ -21,8 +21,8 @@
     "project": ["tsconfig.json"]
 
   },
-  "plugins": ["react", "@typescript-eslint", "react-hooks"],
   "rules": {
+    "react-hooks/rules-of-hooks": "off",
     "jsx-a11y/control-has-associated-label": [ 2, {
       "controlComponents": ["CustomButton"],
       "ignoreElements": [
@@ -41,7 +41,7 @@
     "@typescript-eslint/no-use-before-define": ["error"],
     "react/jsx-filename-extension": ["warn", { "extensions": [".tsx"] }],
     "no-shadow": "off",
-    "@typescript-eslint/no-shadow": ["error"],
+    "@typescript-eslint/no-shadow": ["off"],
     "@typescript-eslint/explicit-function-return-type": [
       "error",
       {

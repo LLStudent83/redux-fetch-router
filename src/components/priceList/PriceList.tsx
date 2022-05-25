@@ -1,10 +1,17 @@
 import * as React from 'react';
-import { useAppSelector } from '../../hooks';
+import { useEffect } from 'react';
+import { useAppDispatch, useAppSelector } from '../../hooks';
 import PriseItem from '../priceItem/PriceItem';
+import { fetchPrices } from '../../fetchFunctions';
 import './priceList.scss';
 
 export default function PriceList(): JSX.Element {
-  const visible = useAppSelector((store) => store.priceListReducer.visible);
+  const dispatch = useAppDispatch();
+  useEffect(() => {
+    fetchPrices(dispatch);
+  }, [dispatch]);
+
+  const prices = useAppSelector((store) => store.priceListReducer.prices);
 
   return (
     <ul className="PriceList__list">
@@ -12,12 +19,12 @@ export default function PriceList(): JSX.Element {
       <p className="PriceList__headers">
         Здесь выведем список
       </p>
-      {visible?.map((prise) => (
+      {prices?.map((prise) => (
         <PriseItem
           key={prise?.id}
           id={prise!.id}
           name={prise!.name}
-          cost={prise!.cost}
+          cost={prise!.price}
         />
       ))}
 

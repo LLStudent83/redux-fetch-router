@@ -1,97 +1,61 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { nanoid } from 'nanoid';
+// import { AppDispatch } from '../../store';
 
 type Price = {
   id: string,
   name: string,
-  cost: number,
+  price: number,
 };
 
 type InitialStateType = {
   prices?: (Price | null)[],
-  changeOrCreate?: string,
-  changePrise: {
+  changePrice?: {
     name: string,
-    cost: number,
+    price: number,
     id: string,
+    content: string,
   },
-  visible?: (Price | null)[],
-  searchQuery: string,
+  loading?: boolean,
+  error?: string | null,
 };
 
 const initialState: InitialStateType = {
   prices: [],
-  changeOrCreate: 'create',
-  changePrise: {
+  changePrice: {
     name: '',
-    cost: 0,
+    price: 0,
     id: '',
+    content: '',
   },
-  visible: [],
-  searchQuery: '',
+  loading: false,
+  error: null,
 };
-
-function filter(arr: (Price | null)[], filterString: string): (Price | null)[] {
-  if (filterString === '') {
-    return arr;
-  }
-  return arr.filter((price) => {
-    const lowPrice: string = price!.name.toLowerCase();
-    return new RegExp(filterString).test(lowPrice);
-  });
-}
 
 export const priceListSlice = createSlice({
   name: 'priceList',
   initialState,
   reducers: {
-    savePrise: (state, action: PayloadAction<Price>) => {
-      const { name, cost } = action.payload;
-      state?.prices?.push({ id: nanoid(), name, cost });
-      state.visible = filter(state.prices, state.searchQuery);
+    fetchPricesRequest: (state) => ({ ...state, loading: true, error: null }),
+
+    fetchPricesFailure: (state, action: PayloadAction<InitialStateType>) => {
+      const { error } = action.payload;
+      return { ...state, loading: false, error };
     },
-    changePrise: (state, action: PayloadAction<Price>) => {
-      const { name, cost, id } = action.payload;
-      state.prices = state?.prices?.map((item) => (
-        item?.id === id ? { ...item, name, cost } : item
-      ));
-      state.visible = filter(state.prices, state.searchQuery);
+
+    fetchPricesSuccess: (state, action:PayloadAction<InitialStateType>) => {
+      const { prices } = action.payload;
+      return {
+        ...state, prices, loading: false, error: null,
+      };
     },
-    deletePrice: (state, action: PayloadAction<Price>) => {
-      const { id } = action.payload;
-      const delIndex = state?.prices
-        ?.findIndex((item) => item?.id === id);
-      state?.prices?.splice(delIndex!, 1);
-      if (state.changeOrCreate === 'change') {
-        state.changePrise = ({
-          ...state.changePrise, name: '', cost: 0, id: '',
-        });
-        state.changeOrCreate = 'create';
-      }
-      state.visible = state.prices;
+
+    changePriceSuccess: (state, action:PayloadAction<InitialStateType>) => {
+      const { changePrice } = action.payload;
+      return {
+        ...state, changePrice, loading: false, error: null,
+      };
     },
-    changeCreateed: (state, action: PayloadAction<any>) => {
-      const { changeOrCreate, id } = action.payload;
-      state.changeOrCreate = changeOrCreate;
-      if (id === null) {
-        state.changePrise = ({
-          ...state.changePrise, name: '', cost: 0, id: '',
-        });
-        return;
-      }
-      const changePrise = state?.prices?.find((item) => item?.id === id);
-      state.changePrise = ({
-        ...state.changePrise,
-        name: changePrise!.name,
-        cost: changePrise!.cost,
-        id: changePrise!.id,
-      });
-    },
-    filterPrice: (state, action: PayloadAction<string>) => {
-      const searchQuery = action.payload.searchQuery.toLowerCase();
-      state.searchQuery = searchQuery;
-      state.visible = filter(state.prices, searchQuery);
-    },
+
     default: (state) => {
       state;
     },
@@ -99,8 +63,8 @@ export const priceListSlice = createSlice({
 });
 
 export const {
-  savePrise, changePrise,
-  deletePrice, changeCreateed, filterPrice,
+  fetchPricesRequest, fetchPricesSuccess,
+  fetchPricesFailure, changePriceSuccess,
 } = priceListSlice.actions;
 
 export default priceListSlice.reducer;
