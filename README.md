@@ -1,6 +1,5 @@
 [![Build status](https://ci.appveyor.com/api/projects/status/4jhi6gm3r05k1vfb?svg=true)](https://ci.appveyor.com/project/LLStudent83/redux-fetch-router)
 
-[![Build status](https://ci.appveyor.com/api/projects/status/4jhi6gm3r05k1vfb/branch/main?svg=true)](https://ci.appveyor.com/project/LLStudent83/redux-fetch-router/branch/main)
 
 API
 ===
