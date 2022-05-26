@@ -4,19 +4,15 @@ import {
 } from './features/priceList/priceListSlice';
 import { AppDispatch } from './store';
 
-// type Price = {
-//   id: string,
-//   name: string,
-//   price: number,
-// };
-
-// type Prices = Price[];
-
 export const fetchPrices = async (dispatch: AppDispatch): Promise<any> => {
   dispatch(fetchPricesRequest());
   try {
     // eslint-disable-next-line max-len
-    const response = await fetch(`${process.env.REACT_APP_BASE_URL}/api/services`);
+    const response = await fetch(`${process.env.REACT_APP_BASE_URL}/api/services`, {
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+      },
+    });
     if (!response.ok) {
       throw new Error(response.statusText);
     }

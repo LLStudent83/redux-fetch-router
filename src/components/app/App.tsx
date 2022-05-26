@@ -11,7 +11,6 @@ import Loader from '../loader/Loader';
 import Popup from '../popup/Popup';
 
 export default function App(): JSX.Element {
-  // const loading = useAppSelector((store) => store.priceListReducer.loading);
   const { loading, error } = useAppSelector((store) => store.priceListReducer);
 
   const loader = loading ? <Loader /> : null;
